@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Text to Speech',
       debugShowCheckedModeBanner: false,
       
-      home:const HomePage(),
+      home: HomePage(),
     );
   }
 }
