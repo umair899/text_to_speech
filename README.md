@@ -6,11 +6,17 @@ A new Flutter project.
 
 This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+# Flutter Text to Speech
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+This is a simple flutter app that converts text to speech.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Getting Started
+1. Clone the repo
+2. Run the app
+3. Enter the text you want to convert to speech
+4. Click the play button
+5. Enjoy the speech
+
+# NOTE
+
+ONLY RUN ON REAL DEVICE NOT AN EMULATOR 
