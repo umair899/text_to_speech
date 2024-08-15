@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  Future<void> speak() async {
+  Future<void> speak(String text) async {
     await flutterTts.setLanguage(selectedLanguage ?? 'en-US');
     await flutterTts.setVolume(volume);
     await flutterTts.setPitch(pitch);
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
 
     // generate an audio and save to storage as a file
     await flutterTts.synthesizeToFile(
-      "text",
+      text,
       'audio/$timetemp.mp3',
     );
   }
@@ -109,7 +109,11 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       IconButton(
                         onPressed: () async {
-                          await speak();
+                          await speak(
+                            _textEditingController.text.isEmpty
+                                ? 'Please enter some text to speak'
+                                : _textEditingController.text,
+                          );
                         },
                         icon: Icon(Icons.play_arrow),
                         iconSize: 50,
@@ -149,15 +153,20 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 20,
               ),
+// DropdownButton for selecting language
+
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(18.0),
                 child: DropdownButton<String>(
-                  hint: Text('Select Language'),
+                  dropdownColor: Colors.grey,
+                  hint: Text(
+                    'Select Language',
+                  ),
                   value: selectedLanguage,
-                  items: languages
-                      .map((language) => DropdownMenuItem<String>(
-                            child: Text(languageMap[language]!),
+                  items: languageMap.keys
+                      .map((String language) => DropdownMenuItem<String>(
                             value: language,
+                            child: Text(language),
                           ))
                       .toList(),
                   onChanged: (value) {
@@ -167,6 +176,49 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              Text("Volume : ${volume.toStringAsFixed(1)}"),
+              Slider(
+                  activeColor: Colors.green,
+                  min: 0.0,
+                  max: 1.0,
+                  value: volume,
+                  onChanged: (value) {
+                    setState(() {
+                      volume = value;
+                    });
+                  }),
+              SizedBox(
+                height: 20,
+              ),
+              Text("Pitch : ${pitch.toStringAsFixed(1)}"),
+              Slider(
+                  activeColor: Colors.blue,
+                  min: 0.0,
+                  max: 1.0,
+                  value: volume,
+                  onChanged: (value) {
+                    setState(() {
+                      volume = value;
+                    });
+                  }),
+
+              SizedBox(
+                height: 20,
+              ),
+              Text("SpeechRate : ${speechRate.toStringAsFixed(1)}"),
+              Slider(
+                  activeColor: Colors.yellow ,
+                  min: 0.5,
+                  max: 2.0,
+                  value: speechRate,
+                  onChanged: (value) {
+                    setState(() {
+                      speechRate = value;
+                    });
+                  }),
             ],
           ),
         ),
