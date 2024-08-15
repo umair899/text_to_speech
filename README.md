@@ -20,3 +20,4 @@ This is a simple flutter app that converts text to speech.
 # NOTE
 
 ONLY RUN ON REAL DEVICE NOT AN EMULATOR 
+![Screenshot_1723701447](https://github.com/user-attachments/assets/f1c56471-419c-43b6-bd5e-f5d620285b66)
