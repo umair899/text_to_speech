@@ -89,13 +89,11 @@ class _HomePageState extends State<HomePage> {
               TextField(
                 controller: textEditingController,
                 maxLines: 5,
-                decoration : InputDecoration(
+                decoration: InputDecoration(
                   focusColor: Colors.white,
-                  hintText : "Enter the text to speak",
-                  border :OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20)
-                  ),
-                
+                  hintText: "Enter the text to speak",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20)),
                 ),
               ),
               Row(
