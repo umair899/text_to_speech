@@ -12,6 +12,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Text to Speech',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
+      
+      ),
+      
       debugShowCheckedModeBanner: false,
       
       home: HomePage(),

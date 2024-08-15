@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FlutterTts flutterTts = FlutterTts();
-  final TextEditingController textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
   Map<String, String> languageMap = {
     'English': 'en-US',
     'Hindi': 'hi-IN',
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    textEditingController.dispose();
+    _textEditingController.dispose();
     super.dispose();
   }
 
@@ -54,10 +54,13 @@ class _HomePageState extends State<HomePage> {
     await flutterTts.setVolume(volume);
     await flutterTts.setPitch(pitch);
     await flutterTts.setSpeechRate(speechRate);
-    String timetamp = DateTime.now().millisecondsSinceEpoch.toString();
+    String timetemp = DateTime.now().millisecondsSinceEpoch.toString();
 
     // generate an audio and save to storage as a file
-    // await flutterTts.synthesizeToFile(text , "tts_audio_$timetamp.mp3");
+    await flutterTts.synthesizeToFile(
+      "text",
+      'audio/$timetemp.mp3',
+    );
   }
 
   Future<void> stop() async {
@@ -72,14 +75,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.indigoAccent,
       appBar: AppBar(
+        elevation: 0.0,
         centerTitle: true,
         title: Text(
           'Text to Speech',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.indigoAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -87,21 +89,84 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               TextField(
-                controller: textEditingController,
+                controller: _textEditingController,
                 maxLines: 5,
                 decoration: InputDecoration(
-                  focusColor: Colors.white,
+                  focusColor: Colors.yellow,
                   hintText: "Enter the text to speak",
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20)),
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.white)),
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // to be continue
+                  Column(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          await speak();
+                        },
+                        icon: Icon(Icons.play_arrow),
+                        iconSize: 50,
+                        color: Colors.green,
+                      ),
+                      Text('Play'),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          await stop();
+                        },
+                        icon: Icon(Icons.stop),
+                        iconSize: 50,
+                        color: Colors.red,
+                      ),
+                      Text('Stop'),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          await pause();
+                        },
+                        icon: Icon(Icons.pause),
+                        iconSize: 50,
+                        color: Colors.blue,
+                      ),
+                      Text('Pause'),
+                    ],
+                  ),
                 ],
-              )
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButton<String>(
+                  hint: Text('Select Language'),
+                  value: selectedLanguage,
+                  items: languages
+                      .map((language) => DropdownMenuItem<String>(
+                            child: Text(languageMap[language]!),
+                            value: language,
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedLanguage = value;
+                    });
+                  },
+                ),
+              ),
             ],
           ),
         ),
