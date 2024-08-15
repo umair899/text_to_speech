@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final FlutterTts flutterTts = FlutterTts();
-  final TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController textEditingController = TextEditingController();
   Map<String, String> languageMap = {
     'English': 'en-US',
     'Hindi': 'hi-IN',
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _textEditingController.dispose();
+    textEditingController.dispose();
     super.dispose();
   }
 
@@ -54,13 +54,20 @@ class _HomePageState extends State<HomePage> {
     await flutterTts.setVolume(volume);
     await flutterTts.setPitch(pitch);
     await flutterTts.setSpeechRate(speechRate);
+    await flutterTts.speak(text);
+  }
+
+  Future<void> save(String text) async {
+    await flutterTts.setLanguage(selectedLanguage ?? 'en-US');
+    await flutterTts.setVolume(volume);
+    await flutterTts.setPitch(pitch);
+    await flutterTts.setSpeechRate(speechRate);
     String timetemp = DateTime.now().millisecondsSinceEpoch.toString();
 
     // generate an audio and save to storage as a file
     await flutterTts.synthesizeToFile(
-      text,
-      'audio/$timetemp.mp3',
-    );
+      text, "tts_audio_$timetemp.mp3"
+          );
   }
 
   Future<void> stop() async {
@@ -89,7 +96,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               TextField(
-                controller: _textEditingController,
+                controller: textEditingController,
                 maxLines: 5,
                 decoration: InputDecoration(
                   focusColor: Colors.yellow,
@@ -110,9 +117,9 @@ class _HomePageState extends State<HomePage> {
                       IconButton(
                         onPressed: () async {
                           await speak(
-                            _textEditingController.text.isEmpty
+                            textEditingController.text.isEmpty
                                 ? 'Please enter some text to speak'
-                                : _textEditingController.text,
+                                : textEditingController.text,
                           );
                         },
                         icon: Icon(Icons.play_arrow),
@@ -196,12 +203,12 @@ class _HomePageState extends State<HomePage> {
               Text("Pitch : ${pitch.toStringAsFixed(1)}"),
               Slider(
                   activeColor: Colors.blue,
-                  min: 0.0,
+                  min: 0.5,
                   max: 1.0,
-                  value: volume,
+                  value: pitch,
                   onChanged: (value) {
                     setState(() {
-                      volume = value;
+                      pitch = value;
                     });
                   }),
 
@@ -210,15 +217,36 @@ class _HomePageState extends State<HomePage> {
               ),
               Text("SpeechRate : ${speechRate.toStringAsFixed(1)}"),
               Slider(
-                  activeColor: Colors.yellow ,
+                  activeColor: Colors.yellow,
                   min: 0.5,
-                  max: 2.0,
+                  max: 1.0,
                   value: speechRate,
                   onChanged: (value) {
                     setState(() {
                       speechRate = value;
                     });
                   }),
+              SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 50,
+                width: double.infinity,
+                
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    foregroundColor: Colors.white,
+                   
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                    onPressed: () async {
+                      await save(textEditingController.text);
+                    },
+                    child: Text("Save Audio")),
+                ),
             ],
           ),
         ),
